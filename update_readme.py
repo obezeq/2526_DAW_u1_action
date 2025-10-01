@@ -75,20 +75,20 @@ def generate_report(status: str, info: dict):
     
     fecha_hora = get_now()
     report = f"""# Test Report ({fecha_hora})
-    
-    - **Total tests:** {info['total']}
-    - **Tests pasados:** {info['passed']} ✅
-    - **Tests fallidos:** {info['failures']} ❌
-    - **Tests con errores:** {info['errors']}
-    - **Tests omitidos:** {info['skipped']} 
-    
-    ## Tiempo de ejecución
-    - Duración total: {info['time']:.2f} segundos
-    
-    ## Estado
-    
-    {status}
-    """
+
+- **Total tests:** {info['total']}
+- **Tests pasados:** {info['passed']} ✅
+- **Tests fallidos:** {info['failures']} ❌
+- **Tests con errores:** {info['errors']}
+- **Tests omitidos:** {info['skipped']} 
+
+## Tiempo de ejecución
+- Duración total: {info['time']:.2f} segundos
+
+## Estado
+
+{status}
+"""
     
     with open("report.md", 'w', encoding='utf-8') as f:
         f.write(report)
