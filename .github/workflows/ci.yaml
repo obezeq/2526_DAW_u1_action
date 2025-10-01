@@ -27,8 +27,8 @@ jobs:
       - name: Ejecutar script de tests y actualizar README
         run: python update_readme.py
 
-      - name: Commit automático del README
+      - name: Commit automático del README y report
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update README con estado de tests"
-          file_pattern: README.md
+          commit_message: "Update README y report.md con estado de tests"
+          file_pattern: README.md report.md
