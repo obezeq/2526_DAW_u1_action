@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import datetime
+from datetime import datetime
 
 def get_now() -> str:
     ahora = datetime.now()
