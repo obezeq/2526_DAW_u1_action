@@ -8,7 +8,6 @@
 
 import subprocess
 import xml.etree.ElementTree as ET
-from datetime import datetime
 from utils import get_now
 
 # ──────────────────────────────────────────────────────────────────
@@ -48,8 +47,21 @@ def parse_junit_xml(xml_file: str) -> dict:
             'passed': passed
         }
         
-    except Exception as e:
-        raise e
+    except FileNotFoundError as e:
+        
+        print(f"[-] ERROR: No se ha encontrado {xml_file}")
+        
+        return {
+            'total': 0,
+            'failures': 0,
+            'errors': 1,
+            'skipped': 0,
+            'time': 0.0,
+            'passed': 0
+        }
+    except ET.ParseError as e:
+        print(f"[-] ERROR: Error al parsear el XML: {e}")
+        raise
     else:
         return junit_xml_parsed
     
@@ -83,7 +95,7 @@ def generate_report(status: str, info: dict):
 
 # ──────────────────────────────────────────────────────────────────
 
-def run_tests() -> str:
+def run_tests() -> tuple[str, dict]:
     """Esta funcion ejecutara los tests y generara un reporte XML.
 
     Returns:
@@ -99,11 +111,16 @@ def run_tests() -> str:
     
     info = parse_junit_xml(xml_file)
     
-    try:
+    if result.returncode == 0:
+        status = f"✅ Tests correctos"
+    else:
+        status = f"❌ Tests fallidos"
+        
+    """ try:
         subprocess.check_call(["pytest", "-q"])
         status = f"✅ Tests correctos"
     except subprocess.CalledProcessError:
-        status = f"❌ Tests fallidos"
+        status = f"❌ Tests fallidos" """
         
     return status, info
 
