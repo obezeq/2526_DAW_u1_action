@@ -24,13 +24,21 @@ jobs:
           python-version: '3.10'
 
       - name: Instalar dependencias
-        run: pip install pytest
+        run: pip install pytest pdoc
+
+      - name: Generar documentación HTML
+        run: |
+          mkdir -p docs
+          pdoc -o docs/ main.py src/
+      
+      - name: Generar documentación Markdown
+        run: pdoc -d markdown main.py src/ > docs/documentation.md
 
       - name: Ejecutar script de tests y actualizar README
         run: python update_readme.py
 
-      - name: Commit automático del README y report
+      - name: Commit automático del README, report, badge y documentation
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update README, report.md y badge.svg con estado de tests"
-          file_pattern: README.md report.md badge.svg
+          commit_message: "Update README, report.md, badge.svg con estado de tests y documentación automática"
+          file_pattern: README.md report.md badge.svg docs/
