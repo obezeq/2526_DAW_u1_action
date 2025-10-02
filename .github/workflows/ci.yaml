@@ -30,11 +30,12 @@ jobs:
         run: |
           mkdir -p docs
           pdoc -o docs/ main.py src/
-      
-      - name: Generar documentación Markdown
-        env:
-          PDOC_BROWSER: "0"
-        run: pdoc -d markdown main.py src/ > docs/documentation.md
+
+      - name: Convertir HTML a PDF
+        uses: misaelnieto/web_to_pdf_action@v1.0.0
+        with:
+          webPageURL: docs/index.html
+          outputFile: docs/documentation.pdf
 
       - name: Ejecutar script de tests y actualizar README
         run: python update_readme.py
