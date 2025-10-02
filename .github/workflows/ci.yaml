@@ -34,7 +34,7 @@ jobs:
       - name: Generar documentación Markdown
         env:
           PDOC_BROWSER: "0"
-        run:  pdoc -d markdown -o docs/markdown/ main.py src/
+        run: pdoc -d markdown main.py src/ > docs/documentation.md
 
       - name: Ejecutar script de tests y actualizar README
         run: python update_readme.py
