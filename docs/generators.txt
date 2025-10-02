@@ -1,0 +1,37 @@
+Help on module src.generators in src:
+
+NAME
+    src.generators - Generadores de archivos de salida.
+
+FUNCTIONS
+    generate_badge(status: str, info: dict) -> None
+        Genera un badge SVG con el estado visual de los tests.
+        
+        El badge muestra:
+        - Color verde (#4c1) si todos los tests pasan
+        - Color rojo (#e05d44) si algún test falla
+        - Color gris (#9f9f9f) si no hay tests
+        - Texto con ratio de tests (ej: "4/5 passing")
+        
+        Args:
+            status (str): Estado de los tests
+            info (dict): Diccionario con métricas de los tests
+    
+    generate_report(status: str, info: dict) -> None
+        Genera el archivo report.md con información detallada de los tests.
+        
+        Args:
+            status (str): Estado de los tests
+            info (dict): Info de los tests
+    
+    update_readme(status: str, is_scheduled: bool = False) -> None
+        Actualiza el README.md añadiendo una nueva línea al historial de tests.
+        
+        Args:
+            status (str): Estado de los tests
+            is_scheduled (bool): True si la ejecucion es atuomatica | False si es manual/push
+
+FILE
+    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/src/generators.py
+
+

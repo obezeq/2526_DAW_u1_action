@@ -1,0 +1,33 @@
+Help on module src.test_runner in src:
+
+NAME
+    src.test_runner - Módulo para ejecutar tests con pytest.
+
+DESCRIPTION
+    Este módulo se encarga de:
+    - Ejecutar pytest con configuración JUnit XML
+    - Parsear los resultados
+    - Retornar estado y métricas de los tests
+
+FUNCTIONS
+    run_tests() -> tuple[str, dict]
+        Ejecuta los tests con pytest y retorna el estado y la información.
+        
+        Genera un archivo JUnit XML temporal con los resultados,
+        lo parsea para extraer métricas, y determina el estado general.
+        
+        Returns:
+            tuple[str, dict]: Una tupla con:
+                - status (str): Estado de los tests
+                - info (dict): Diccionario con métricas:
+                    - total (int): Total de tests ejecutados
+                    - passed (int): Tests que pasaron
+                    - failures (int): Tests que fallaron
+                    - errors (int): Tests con errores
+                    - skipped (int): Tests omitidos
+                    - time (float): Tiempo de ejecución en segundos
+
+FILE
+    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/src/test_runner.py
+
+

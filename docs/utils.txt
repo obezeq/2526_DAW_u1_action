@@ -1,0 +1,47 @@
+Help on module src.utils in src:
+
+NAME
+    src.utils - Utilidades generales del proyecto.
+
+DESCRIPTION
+    Este módulo contiene funciones auxiliares reutilizables:
+    - Manejo de fechas y horas
+    - Parseo de archivos XML de JUnit
+
+FUNCTIONS
+    get_now() -> str
+        Obtiene la fecha y hora actual formateada.
+        
+        Returns:
+            str: Fecha y hora en formato "YYYY-MM-DD HH:MM"
+    
+    is_scheduled_action() -> bool
+        Detecta si la ejecucion actual es programada (schedule) o no (manual/push).
+        
+        Usa la env que nos proporciona GitHub Actions atuomaticamente GITHUB_EVENT_NAME
+        
+        Returns:
+            bool: True, si la ejecucion es programada | False, si la ejecucion es manual/push
+    
+    parse_junit_xml(xml_file: str) -> dict
+        Parsea un archivo JUnit XML y extrae métricas de tests.
+        
+        Args:
+            xml_file (str): Ruta al archivo XML de JUnit
+        
+        Returns:
+            dict: Diccionario con métricas:
+                - total (int): Total de tests
+                - failures (int): Tests fallidos
+                - errors (int): Tests con errores
+                - skipped (int): Tests omitidos
+                - time (float): Tiempo de ejecución
+                - passed (int): Tests pasados (calculado)
+        
+        Raises:
+            ET.ParseError: Si el archivo XML está mal formado
+
+FILE
+    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/src/utils.py
+
+

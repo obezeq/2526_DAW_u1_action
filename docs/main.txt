@@ -1,0 +1,19 @@
+Help on module main:
+
+NAME
+    main
+
+FUNCTIONS
+    saludo(nombre: str) -> str
+        Genera un saludo personalizado
+        
+        Args:
+            nombre (str): El nombre personalizado
+        
+        Returns:
+            str: El saludo personalizado
+
+FILE
+    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/main.py
+
+
