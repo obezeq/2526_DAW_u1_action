@@ -369,3 +369,391 @@ Este proyecto sirve para aprender a usar GitHub Actions 🚀
 - ✅  2025-10-01 18:18 - Tests correctos
 - ✅  2025-10-01 18:15 - Tests correctos
 - ✅ Tests correctos
+
+---
+
+## Documentación Técnica del Proyecto
+
+### (a) Herramientas de generación de documentación
+
+Para este proyecto / practica lo que he utilizado son dos herramientas principales para generar la documentación centrandome en HTML y TXT / Texto Plano:
+
+- **pdoc** => Para generar documentación en formato HTML
+- **pydoc** (incluido en Python) => Para generar documentación en texto plano
+
+Los comandos que ejecuto en el workflow que podemos ver en `.github/workflows/ci.yaml` son:
+
+```bash
+# Documentación HTML
+pdoc -o docs/ main.py src/
+
+# Documentación en texto plano
+python -m pydoc main > docs/main.txt
+python -m pydoc src.test_runner > docs/test_runner.txt
+python -m pydoc src.generators > docs/generators.txt
+python -m pydoc src.utils > docs/utils.txt
+```
+
+### (b) Código documentado con docstrings
+
+He documentado todas las funciones usando docstrings que me proporciona la extensión de Visual Studio Code, la cual te genera docstrings de tipo: **Google Style Docstrings**. Aquí muestro un ejemplo de [main.py](main.py):
+
+```python
+def saludo(nombre: str) -> str:
+    """Genera un saludo personalizado
+
+    Args:
+        nombre (str): El nombre personalizado
+
+    Returns:
+        str: El saludo personalizado
+    """
+
+    return f"Hola, {nombre}!"
+```
+
+Este formato basicamente utiliza las etiquetas 'Args' para los parámetros y 'Returns' para el valor de retorno, que son reconocidas automáticamente por pdoc y pydoc sin ningun tipo de inconvenientes.
+
+### (c) Formatos de documentación generados
+
+Como he comentado anteriormente, he generado la documentación en **dos formatos diferentes**:
+
+**1. HTML (con pdoc):**
+- [docs/index.html](docs/index.html) - Página principal
+- [docs/main.html](docs/main.html)
+- [docs/src/test_runner.html](docs/src/test_runner.html)
+- [docs/src/generators.html](docs/src/generators.html)
+- [docs/src/utils.html](docs/src/utils.html)
+
+**2. Texto plano (con pydoc):**
+- [docs/main.txt](docs/main.txt)
+- [docs/test_runner.txt](docs/test_runner.txt)
+- [docs/generators.txt](docs/generators.txt)
+- [docs/utils.txt](docs/utils.txt)
+
+### (d) Funcionamiento del Workflow
+
+Mi workflow está configurado en [.github/workflows/ci.yaml](.github/workflows/ci.yaml), y a continuacion voy a mostrar paso a paso cual es el "workflow" que sigue mi workflow:
+
+**Pasos del job `test-and-update`:**
+
+1. **Checkout del repositorio** - Descarga el código
+2. **Configuración de  Python 3.10** - Prepara el entorno
+3. **Instala dependencias** - Instala `pytest` y `pdoc`
+4. **Se genera la documentación HTML** - Ejecuta `pdoc` sobre main.py y src/
+5. **Se genera la documentación TXT (texto plano)** - Ejecuta `pydoc` para cada módulo
+6. **Ejecuta tests y se actualiza README** - Corre `update_readme.py`
+7. **Se hace commit automático** - Sube cambios con `git-auto-commit-action`
+
+**Eventos que disparan el workflow:**
+
+- `push` a la rama `main` => Se ejecuta cada vez que subo código
+- `workflow_dispatch` => Puedo ejecutarlo manualmente desde GitHub
+- `schedule` (cron: `0 0 * * *`) => Se ejecuta automáticamente todos los días a medianoche UTC (como podemos ver en el historial de commits, hice una prueba en la que ejecutaba durante 5 minutos para probar, me fui un rato, volví, y había una gran cantidad de commits, posteriormente cambie inmediatamente para poner la versión del "cron" original.)
+
+### (e) Mensajes de commit
+
+He mantenido mensajes de commit claros y descriptivos durante todo el proyecto. Ejemplos:
+
+- `Update README, report.md, badge.svg con estado de tests y documentación automática`
+- `3. Badges automáticos en README`
+- `Fixing markdown documentation generation`
+
+**¿Por qué considero que son claros?**
+
+- Creo que son claros porque sigen buenas practicas, debido a que describo que cambio y por qué, o qué es lo que estoy arreglando.
+- También pienso que son consisos pero a la vez informativos
+- Y en ocasiones uso imperativos y prefijos convencionales como `Update`, `Fixing`...
+
+### (f) Configuración SSH para GitHub
+
+He configurado SSH para autenticarme de forma segura con GitHub:
+
+**Pasos que seguí cuando configuré hace tiempo mi clave de GitHub:**
+
+1. Generé un par de claves SSH:
+   ```bash
+   ssh-keygen -t ed25519 -C "aquipusemicorreo@correo.com"
+   ```
+
+2. Añadí la clave pública en GitHub: **Settings > SSH and GPG keys > New SSH key**
+
+3. Y si probamos la conexión con el siguiente comando, es satisfactoria como vemos en la captura de pantalla:
+   ```bash
+   ssh -T git@github.com
+   ```
+
+![Prueba conexión de GitHub con SSH](images/github_ssh_proof.png)
+
+### (g) Cómo clonar y reproducir el proyecto
+
+Si quieres clonar este repositorio y ejecutar todo localmente, deberias seguir los siguientes pasos recomendados:
+
+**1. Clonar el repositorio:**
+```bash
+git clone git@github.com:obezeq/2526_DAW_u1_action.git
+cd 2526_DAW_u1_action
+```
+
+**2. Instalar las dependencias necesarias:**
+```bash
+pip install pytest pdoc
+```
+
+O es recomendado que se genere un entorno virtual, si no estas en Windows:
+
+(Creamos el entorno virtual llamado 'venv')
+```bash
+python -m venv venv
+```
+
+(Activamos el entorno virtual)
+```bash
+source venv/bin/activate
+```
+
+Y una vez adentro del entorno virtual, instalamos las dependencias.
+
+
+**3. Generar la documentación manualmente:**
+
+```bash
+# HTML
+pdoc -o docs/ main.py src/
+
+# Texto plano
+python -m pydoc main > docs/main.txt
+python -m pydoc src.test_runner > docs/test_runner.txt
+python -m pydoc src.generators > docs/generators.txt
+python -m pydoc src.utils > docs/utils.txt
+```
+
+**4. Ejecutar los tests:**
+```bash
+python update_readme.py
+```
+
+**5. Ver los resultados:**
+- Para ver los resultados, lo mejor es verlos en HTML en formato web, para ello abre la carpeta y abre el archivo `docs/index.html` en tu navegador para ver la documentación HTML.
+- Tambien puedes revisar el `README.md` para ver el estado actualizado de los tests.
+- Y para mas información adicional, puedes consulta `report.md` para el informe detallado.
+
+---
+
+## Cuestionario de Evaluación
+
+### a) Identificación de herramientas de generación de documentación
+
+**¿Qué herramienta o generador utilizaste en el workflow para crear la documentación en /docs?**
+
+Como mencioné anteriormente He utilizado principalmente **2 herramientas**:
+
+1. **pdoc**: Que la use principalmente para generar la documentación en formato HTML. Es una herramienta moderna que extrae automáticamente los docstrings de Python y crea páginas web navegables sin ningun tipo de inconvenientes, y ademas muy intuitivo y facil.
+
+2. **pydoc**: Es el generador de documentación nativo de Python (viene incluido, no necesita instalación). Es por ello que lo usé, por su facilidad de uso en todos los escenarios y equipos, para generar archivos de texto plano (.txt) con la documentación de cada módulo.
+
+Como hemos visto, ambas herramientas procesan los docstrings que he documentado en todo el codigo, usando el formato Google Sytle.
+
+### b) Documentación de componentes
+
+**Muestra un fragmento del código con comentarios/docstrings estructurados:**
+
+Aquí está mi función principal de [main.py](main.py) completamente documentada:
+
+```python
+def saludo(nombre: str) -> str:
+    """Genera un saludo personalizado
+
+    Args:
+        nombre (str): El nombre personalizado
+
+    Returns:
+        str: El saludo personalizado
+    """
+
+    return f"Hola, {nombre}!"
+```
+
+**Estructura utilizada:**
+
+
+En la primera línea se hace una descripción breve de la función. Y posteriormente se determina:
+- `Args:` => Lista de parámetros con su tipo y descripción
+- `Returns:` => Tipo y descripción del valor devuelto
+
+Este es el **formato Google Style Docstrings**, que es muy legible y es compatible con las herramientas de documentación automática.
+
+### c) Multiformato
+
+**¿Qué segundo formato (además de HTML) generaste? Explica la configuración o comandos del workflow que lo producen.**
+
+Además del HTML, he generado documentación en **formato texto plano (.txt)** usando `pydoc` como he mencionado anteriormente.
+
+**Comando del workflow:**
+
+```yaml
+- name: Generar documentación en texto plano
+  run: |
+    python -m pydoc main > docs/main.txt
+    python -m pydoc src.test_runner > docs/test_runner.txt
+    python -m pydoc src.generators > docs/generators.txt
+    python -m pydoc src.utils > docs/utils.txt
+```
+
+**¿Por qué elegí TXT?**
+
+Porque `pydoc` es una herramienta nativa de Python (no requiere instalación extra), genera archivos ligeros y ademas muy faciles de leer, y tambien es muy simple de usar. Probé otras opciones como PDF o Markdown pero tenían dependencias complicadas o problemas de encoding, y me decante simplemente por generarlo en texto plano, que tambien tenia curiosidad de ver como plasman la información en un simple .txt y lo hicieron bastante bien.
+
+### d) Colaboración
+
+**Explica cómo GitHub facilita mantener la documentación cuando colaboran varias personas:**
+
+Desde mi experiencia en este proyecto, GitHub facilita la colaboración de varias formas:
+
+**1. Pull Requests (PRs):**
+- Cuando un colaborador quiere actualizar la documentación, simplemente lo que hace es crear un PR
+- Despues otros miembros pueden revisar los cambios antes de ser aceptados lo cual es muy util para proyectos escalables y grandes.
+- Y tambien permite hacer comentarios línea por línea.
+
+**2. Code Reviews:**
+- Los colaboradores pueden aprobar o rechazar cambios
+- Se asegura que la documentación esté correcta antes de fusionarse
+
+**3. Checks de CI automáticos:**
+- Mi workflow verifica que los tests pasen antes de que se haga un 'merge'.
+- Si alguien rompe algo, el PR se bloquea automáticamente lo cual es una ventaja.
+
+**4. Branch Protection:**
+- Se puede configurar para que la rama `main` requiera aprobaciones de otros colaboradores o usuarios, que pasen todos los checks del CI, y que la rama este actualizada.
+
+**5. Historial de commits:**
+- Me permite ver quién hizo cada cambio, y si algo fallta puedo simplemente revertirlo a una versión anterior, lo cual hace que se eviten problemas y ademas mejora la seguridad.
+
+Todo esto hace que mantener la documentación sea muy segura, y ademas muy facil para colaborar entre equipos, pequeños, medianos o grandes.
+
+### e) Control de versiones
+
+**Muestra mensajes de commit que evidencien el nuevo workflow. ¿Son claros y descriptivos? Justifícalo.**
+
+Estos son algunos de mis commits del proyecto:
+
+- `Update README, report.md, badge.svg con estado de tests y documentación automática`
+- `3. Badges automáticos en README`
+- `Fixing markdown documentation generation`
+
+**¿Son claros y descriptivos? Sí, porque:**
+
+- Creo que son claros porque sigen buenas practicas, debido a que describo que cambio y por qué, o qué es lo que estoy arreglando.
+- También pienso que son consisos pero a la vez informativos
+- Y en ocasiones uso imperativos y prefijos convencionales como `Update`, `Fixing`...
+
+Esto permite a cualquier colaborador entender rápidamente qué cambió sin tener que revisar el código.
+
+### f) Accesibilidad y seguridad
+
+**¿Qué medidas/configuración del repositorio garantizan que solo personal autorizado accede al código y la documentación?**
+
+Se pueden implementar muchas medidas seguridad que github nos proporciona, lo cual lo hace perfecto para ser la plataforma nº1 de control de versiones online, tanto para uso personal como para trabajar con equipo.
+
+**1. Autenticación SSH:**
+- Actualmente, uso claves SSH (pública/privada) para autenticarme porque considero que es la mejor opción porque solo quien tenga la clave privada puede hacer push.
+- La clave pública está registrada en mi cuenta de GitHub.
+
+**2. Permisos del repositorio:**
+- Puedo configurar el repo como privado (solo colaboradores invitados acceden)
+- GitHub permite asignar roles: Admin, Write, Read
+- Aunque no lo tengo para este proyecto en concreto, en muchos proyectos lo suelo mantener en privado.
+
+**3. Branch Protection Rules:**
+- Puedo configurar que `main` necesite una revision obligatoria antes de hacerse un merge, que pasen todos los checks del CI y que ademas no se permitan hacer un push --foce (force push)
+
+**4. GITHUB_TOKEN:**
+- El workflow usa un token automático generado por GitHub
+- Tiene permisos limitados (`contents: write`) solo para lo necesario
+- Esto es buenisimo porque no expone credenciales sensibles
+
+**5. Secretos de GitHub:**
+- Si necesito tokens o contraseñas, los guardo en GitHub Secrets
+- Nunca se exponen en el código ni en los logs
+- Esto es muy bueno porque no me hace depender de tener que subir un .env desde el local al repositorio lo cual expone la seguridad, simplemente lo manejo desde GitHub Secrets y es mucho mejor para cosas en las que GitHub tenga que utilizar el token / el secreto.
+
+### g) Instalación/uso documentados
+
+**Indica dónde en el README.md explicas el funcionamiento del workflow y dónde detallas las herramientas y comandos de documentación.**
+
+He documentado todo en las siguientes secciones del README.md:
+
+**Funcionamiento del workflow:**
+- **Sección (d):** "Funcionamiento del Workflow": aqui explicoi los 7 pasos del job y tambien detallo los 3 eventos que lo disparan que son (push, workflow_dispatch, schedule).
+
+**Herramientas y comandos:**
+- **Sección (a):** "Herramientas de generación de documentación": Listo pdoc y pydoc, y muestro los comandos exactos ejecutados.
+
+**Cómo reproducir:**
+- **Sección (g):** "Cómo clonar y reproducir el proyecto": Paso a paso con comandos copiables somo como: clonar, instalar, generar docs, ejecutar tests
+
+Con estas tres secciones, cualquier persona puede entender cómo funciona el proyecto y reproducirlo localmente sin ningun tipo de inconvenientes.
+
+### h) Integración continua
+
+**Justifica por qué el workflow utilizado es CI. ¿Qué evento dispara automáticamente la generación/actualización de la documentación?**
+
+Mi workflow **es definitivamente CI (Integración Continua)** por estas razones:
+
+**¿Qué es CI?**
+- Es la práctica de automatizar la integración de cambios de códigohg
+- Se valida automáticamente que todo ha funcionado correctamente
+- Se ejecuta en cada cambio para detectar errores rápidamente, lo que permite que se solucione rapido.
+
+**¿Por qué considero que mi workflow es CI?**
+
+1. **Automatización completa:** se ejecuta los tests automaticamente, generando documentacion sin invervencion manual, y haciendo finalmente un commit de los resultados, teniendo todo automatizado.
+
+2. **Validación en cada cambio:** si los tests fallan el workflow lo refleja inmediatamente, y la documetancion se regenera en cada push
+
+3. **Feedback rápido:** se hace en minutos, y en pocos segundos sabré si mi codigo funciona o no, de forma automática. Ademas lo sabre visualmente con el BADGE que muestra el estado de forma visual.
+
+**Eventos que disparan automáticamente:**
+
+- **`push` a `main`** => Cada vez que subo código, se ejecuta todo
+- **`schedule` (cron)** => Se ejecuta diariamente a medianoche UTC aunque no haya cambios
+- **`workflow_dispatch`** => Puedo ejecutarlo manualmente cuando quiera
+
+El más importante para CI es **`push`**, porque asegura que cada cambio se integra realmente para pasar los tests y se actualice la documentación de forma automatica.
+
+---
+
+## Conclusiones Personales
+
+Trabajando en este proyecto he aprendido mucho sobre automatización y buenas prácticas de desarrollo:
+
+### Lo que he aprendido:
+
+**1. GitHub Actions es muy potente:**
+- Es mas potente de lo que me esperaba, no solo sirve para tests, también para documentación, badges, reportes, etc...
+- No pensaba que se podria integrar de forma tan sencilla con APIs como Discord Webhooks y todo de una forma que lo haga solo el GitHub, sin necesidad de hosting, ni nada... solamente GitHub y gratuito.
+- La configuración YAML es clara una vez entiendes la estructura
+- El hecho de que se ejecute automáticamente es increíblemente útil, me fascina mucho el hecho de automatizar procesos, y experimentar con GitHub Actions me ha gustado mucho, por lo que aprecio haber realizado esta práctica tan extensa con una gran variedad de retos, que nos permiten aprender mas y mas cada dia :D
+
+**2. La documentación es clave:**
+- Los docstrings bien escritos generan una documentación profesional automáticamente, importante para la eficiencia del tiempo a parte de que te las herramienitas automaticas te lo hacen todo muy claro y facil de ver visualmente.
+- Tener múltiples formatos (HTML navegable, TXT portable) es muy práctico para exportar y presentar la documentacion a diferentes equipos / departamentos.
+- La documentación debe actualizarse con el código, no después
+
+**3. CI/CD en la práctica:**
+- Integración continua significa que cada cambio se valida automáticamente
+- Los commits automáticos mantienen el repo siempre actualizado
+- Los badges dan feedback visual instantáneo del estado del proyecto
+
+**4. Control de versiones profesional:**
+- Los mensajes de commits claros son muy importantes para colaborar en equipo, y tambien para organizacion personal.
+- Branch protection y reviews evitan errores en producción
+- SSH y tokens permiten automatización segura, muy importante la seguridad, especialmente en el ambito de proyectos empresariales con equipos.
+
+### Aplicación futura:
+
+Estos conocimientos los voy a aplicar en todos mis proyectos futuros, especialmente los de la automatización, como lo lo de 'cron', lo cual me fascina mucho. He podido entende ahora el por qué las empresas usan CI/CD, definitivamente ahorra mucho tiempo, previene errores y mantiene la calidad del código sin esfuerzo manual constante.
+
+Detectar esos patrones manuales, pararse a automatizarlos, puede parecer tedioso, pero realmente merece mucho la pena, porque nos ahorrará mucho tiempo, no solo para nosotros, sino para las personas que desplieguen / utilice nuestro producto.
+
+El flujo de trabajo que he creado es escalable: puedo añadir más tests, más formatos de documentación, notificaciones, despliegues automáticos, etc. GitHub Actions es una herramienta que voy a seguir explorando.
