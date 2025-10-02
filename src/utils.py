@@ -93,3 +93,15 @@ def parse_junit_xml(xml_file: str) -> dict:
 
     else:
         return junit_xml_parsed
+
+def is_scheduled_action() -> bool:
+    """Detecta si la ejecucion actual es programada (schedule) o no (manual/push).
+    
+    Usa la env que nos proporciona GitHub Actions atuomaticamente GITHUB_EVENT_NAME
+
+    Returns:
+        bool: True, si la ejecucion es programada | False, si la ejecucion es manual/push
+    """
+    
+    import os
+    return os.getenv("GITHUB_EVENT_NAME") == 'schedule'

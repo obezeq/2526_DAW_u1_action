@@ -90,16 +90,18 @@ def generate_badge(status: str, info: dict) -> None:
         f.write(svg)
 
 
-def update_readme(status: str) -> None:
+def update_readme(status: str, is_scheduled: bool = False) -> None:
     """
     Actualiza el README.md añadiendo una nueva línea al historial de tests.
 
     Args:
         status (str): Estado de los tests
+        is_scheduled (bool): True si la ejecucion es atuomatica | False si es manual/push
     """
     
     fecha_hora = get_now()
-    linea_historial = f"- {status[:2]} {fecha_hora} - {status[2:].strip()}\n"
+    sufijo = " (automática)" if is_scheduled else ""
+    linea_historial = f"- {status[:2]} {fecha_hora} - {status[2:].strip()}{sufijo}\n"
 
     # Leer README actual
     with open("README.md", "r", encoding="utf-8") as f:

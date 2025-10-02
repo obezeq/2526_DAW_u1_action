@@ -11,6 +11,7 @@ Uso:
 # Dependencies
 from src.test_runner import run_tests
 from src.generators import generate_report, generate_badge, update_readme
+from src.utils import is_scheduled_action
 
 
 # Main
@@ -26,7 +27,12 @@ def main():
     """
     print("[*] Ejecutando tests...")
     status, info = run_tests()
-
+    
+    # Detectamos el tipo de ejecucion
+    is_scheduled = is_scheduled_action()
+    tipo_ejecucion = "automática (schedule)" if is_scheduled else "manual/push"
+    
+    print(f"[*] Tipo de ejecucion: {tipo_ejecucion}")
     print(f"[*] Estado: {status}")
     print(f"[*] Tests pasados: {info['passed']}/{info['total']}")
 
@@ -34,7 +40,7 @@ def main():
     generate_badge(status, info)
 
     print("[*] Actualizando README...")
-    update_readme(status)
+    update_readme(status, is_scheduled)
 
     print("[*] Generando reporte...")
     generate_report(status, info)
