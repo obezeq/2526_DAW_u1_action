@@ -26,10 +26,12 @@ jobs:
       - name: Instalar dependencias
         run: pip install pytest pdoc
 
-      - name: Generar documentación HTML
+      - name: Generar documentación en texto plano
         run: |
-          mkdir -p docs
-          pdoc -o docs/ main.py src/
+          python -m pydoc main > docs/main.txt
+          python -m pydoc src.test_runner > docs/test_runner.txt
+          python -m pydoc src.generators > docs/generators.txt
+          python -m pydoc src.utils > docs/utils.txt
 
       - name: Convertir HTML a PDF
         uses: misaelnieto/web_to_pdf_action@v1.0.0
