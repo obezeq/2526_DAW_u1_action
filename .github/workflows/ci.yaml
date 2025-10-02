@@ -26,6 +26,9 @@ jobs:
       - name: Instalar dependencias
         run: pip install pytest pdoc
 
+      - name: Generar documentación HTML
+        run: pdoc -o docs/ main.py src/
+        
       - name: Generar documentación en texto plano
         run: |
           python -m pydoc main > docs/main.txt
