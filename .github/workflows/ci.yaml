@@ -32,7 +32,9 @@ jobs:
           pdoc -o docs/ main.py src/
       
       - name: Generar documentación Markdown
-        run: pdoc -d markdown main.py src/ > docs/documentation.md
+        env:
+          PDOC_BROWSER: "0"
+        run:  pdoc -d markdown -o docs/markdown/ main.py src/
 
       - name: Ejecutar script de tests y actualizar README
         run: python update_readme.py
