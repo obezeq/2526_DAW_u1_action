@@ -1,4 +1,29 @@
-__pycache__/
-*.pyc
-.pytest_cache/
+# Archivos temporales de pytest
 test-results.xml
+.pytest_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
