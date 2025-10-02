@@ -95,6 +95,56 @@ def generate_report(status: str, info: dict):
 
 # ──────────────────────────────────────────────────────────────────
 
+def generate_badge(status: str, info: dict):
+    """Generamos un badge SVG con el estado de los tests.
+
+    Args:
+        status (str): Estado de los tests
+        info (dict): Informacion de los tests
+    """
+    
+    passed = info.get("passed")
+    total = info.get("total")
+    
+    color = None
+    mensaje = None
+    
+    if (total == 0):
+        color = "#9f9f9f"
+        mensaje = "no tests"
+    elif (passed == total):
+        color = "#4c1"
+        mensaje = f"{passed}/{total} passing"
+    elif (passed < total):
+        color = "#e05d44"
+        mensaje = f"{passed}/{total} passing"
+    
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="150" height="20">
+    <linearGradient id="b" x2="0" y2="100%">
+        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+        <stop offset="1" stop-opacity=".1"/>
+    </linearGradient>
+    <mask id="a">
+        <rect width="150" height="20" rx="3" fill="#fff"/>
+    </mask>
+    <g mask="url(#a)">
+        <path fill="#555" d="M0 0h50v20H0z"/>
+        <path fill="{color}" d="M50 0h100v20H50z"/>
+        <path fill="url(#b)" d="M0 0h150v20H0z"/>
+    </g>
+    <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+        <text x="25" y="15" fill="#010101" fill-opacity=".3">tests</text>
+        <text x="25" y="14">tests</text>
+        <text x="100" y="15" fill="#010101" fill-opacity=".3">{mensaje}</text>
+        <text x="100" y="14">{mensaje}</text>
+    </g>
+</svg>'''
+    
+    with open("badge.svg", 'w', encoding='utf-8') as f:
+        f.write(svg)
+
+# ──────────────────────────────────────────────────────────────────
+
 def run_tests() -> tuple[str, dict]:
     """Esta funcion ejecutara los tests y generara un reporte XML.
 
@@ -147,5 +197,6 @@ def update_readme(status: str):
 if __name__ == "__main__":
     
     status, info = run_tests()
+    generate_badge(status, info)
     update_readme(status)
     generate_report(status, info)

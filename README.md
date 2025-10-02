@@ -334,6 +334,8 @@ Con estas extensiones conseguireis:
 
 # Mi Proyecto con GitHub Actions
 
+![Test Status](badge.svg)
+
 Este proyecto sirve para aprender a usar GitHub Actions 🚀
 
 ## Estado de los tests
