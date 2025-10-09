@@ -32,6 +32,6 @@ FUNCTIONS
             is_scheduled (bool): True si la ejecucion es atuomatica | False si es manual/push
 
 FILE
-    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/src/generators.py
+    /home/runner/work/2526_DAW_u1_actions/2526_DAW_u1_actions/src/generators.py
 
 

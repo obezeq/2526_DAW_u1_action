@@ -14,6 +14,6 @@ FUNCTIONS
             str: El saludo personalizado
 
 FILE
-    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/main.py
+    /home/runner/work/2526_DAW_u1_actions/2526_DAW_u1_actions/main.py
 
 
