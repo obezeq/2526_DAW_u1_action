@@ -28,6 +28,6 @@ FUNCTIONS
                     - time (float): Tiempo de ejecución en segundos
 
 FILE
-    /home/runner/work/2526_DAW_u1_actions/2526_DAW_u1_actions/src/test_runner.py
+    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/src/test_runner.py
 
 

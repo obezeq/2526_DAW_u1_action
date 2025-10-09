@@ -42,6 +42,6 @@ FUNCTIONS
             ET.ParseError: Si el archivo XML está mal formado
 
 FILE
-    /home/runner/work/2526_DAW_u1_actions/2526_DAW_u1_actions/src/utils.py
+    /home/runner/work/2526_DAW_u1_action/2526_DAW_u1_action/src/utils.py
 
 
