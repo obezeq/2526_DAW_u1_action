@@ -339,7 +339,6 @@ Con estas extensiones conseguireis:
 Este proyecto sirve para aprender a usar GitHub Actions 🚀
 
 ## Estado de los tests
-- ✅  2025-10-09 20:10 - Tests correctos
 - ✅  2025-10-09 19:40 - Tests correctos
 - ✅  2025-10-09 01:12 - Tests correctos (automática)
 - ✅  2025-10-08 01:11 - Tests correctos (automática)
@@ -387,16 +386,20 @@ Este proyecto sirve para aprender a usar GitHub Actions 🚀
 
 ### (a) Herramientas de generación de documentación
 
-Para este proyecto / practica lo que he utilizado son dos herramientas principales para generar la documentación centrandome en HTML y TXT / Texto Plano:
+Para este proyecto / practica lo que he utilizado son tres herramientas principales para generar la documentación centrandome en HTML y TXT / Texto Plano:
 
 - **pdoc** => Para generar documentación en formato HTML
 - **pydoc** (incluido en Python) => Para generar documentación en texto plano
+- **pandoc** => La cula use para generar el formato Latex
 
 Los comandos que ejecuto en el workflow que podemos ver en `.github/workflows/ci.yaml` son:
 
 ```bash
 # Documentación HTML
 pdoc -o docs/ main.py src/
+
+# Generar documentación LaTeX
+pandoc docs/index.html -o docs/documentation.tex
 
 # Documentación en texto plano
 python -m pydoc main > docs/main.txt
@@ -442,6 +445,9 @@ Como he comentado anteriormente, he generado la documentación en **dos formatos
 - [docs/generators.txt](docs/generators.txt)
 - [docs/utils.txt](docs/utils.txt)
 
+**3. LaTeX (con pandoc):**
+  - [docs/documentation.tex](docs/documentation.tex)
+
 ### (d) Funcionamiento del Workflow
 
 Mi workflow está configurado en [.github/workflows/ci.yaml](.github/workflows/ci.yaml), y a continuacion voy a mostrar paso a paso cual es el "workflow" que sigue mi workflow:
@@ -452,9 +458,10 @@ Mi workflow está configurado en [.github/workflows/ci.yaml](.github/workflows/c
 2. **Configuración de  Python 3.10** - Prepara el entorno
 3. **Instala dependencias** - Instala `pytest` y `pdoc`
 4. **Se genera la documentación HTML** - Ejecuta `pdoc` sobre main.py y src/
-5. **Se genera la documentación TXT (texto plano)** - Ejecuta `pydoc` para cada módulo
-6. **Ejecuta tests y se actualiza README** - Corre `update_readme.py`
-7. **Se hace commit automático** - Sube cambios con `git-auto-commit-action`
+5. **Se genera la documentación LaTeX** - Ejecuta `pandoc` para convertir HTML a .tex
+6. **Se genera la documentación TXT (texto plano)** - Ejecuta `pydoc` para cada módulo
+7. **Ejecuta tests y se actualiza README** - Corre `update_readme.py`
+8. **Se hace commit automático** - Sube cambios con `git-auto-commit-action`
 
 **Eventos que disparan el workflow:**
 
@@ -509,6 +516,8 @@ cd 2526_DAW_u1_action
 **2. Instalar las dependencias necesarias:**
 ```bash
 pip install pytest pdoc
+sudo apt-get update
+sudo apt-get install -y pandoc
 ```
 
 O es recomendado que se genere un entorno virtual, si no estas en Windows:
@@ -531,6 +540,9 @@ Y una vez adentro del entorno virtual, instalamos las dependencias.
 ```bash
 # HTML
 pdoc -o docs/ main.py src/
+
+# Latex
+pandoc docs/index.html -o docs/documentation.tex
 
 # Texto plano
 python -m pydoc main > docs/main.txt
@@ -557,11 +569,13 @@ python update_readme.py
 
 **¿Qué herramienta o generador utilizaste en el workflow para crear la documentación en /docs?**
 
-Como mencioné anteriormente He utilizado principalmente **2 herramientas**:
+Como mencioné anteriormente He utilizado principalmente **3 herramientas**:
 
 1. **pdoc**: Que la use principalmente para generar la documentación en formato HTML. Es una herramienta moderna que extrae automáticamente los docstrings de Python y crea páginas web navegables sin ningun tipo de inconvenientes, y ademas muy intuitivo y facil.
 
 2. **pydoc**: Es el generador de documentación nativo de Python (viene incluido, no necesita instalación). Es por ello que lo usé, por su facilidad de uso en todos los escenarios y equipos, para generar archivos de texto plano (.txt) con la documentación de cada módulo.
+   
+3. **pandoc** Lo use para generar la documentación con Latex partiendo del código base HTML. La use principalmente por su facilidad de uso para la genreración de documnentación latex, la cual la hace muy efectiva.
 
 Como hemos visto, ambas herramientas procesan los docstrings que he documentado en todo el codigo, usando el formato Google Sytle.
 
@@ -596,9 +610,11 @@ Este es el **formato Google Style Docstrings**, que es muy legible y es compatib
 
 ### c) Multiformato
 
-**¿Qué segundo formato (además de HTML) generaste? Explica la configuración o comandos del workflow que lo producen.**
+**¿Qué otros formato (además de HTML) generaste? Explica la configuración o comandos del workflow que lo producen.**
 
 Además del HTML, he generado documentación en **formato texto plano (.txt)** usando `pydoc` como he mencionado anteriormente.
+
+Y también generé la documentación con **Latex** utilizando `pandoc` gracias a la documentación proporcionada por la documentación de HTML.
 
 **Comando del workflow:**
 
