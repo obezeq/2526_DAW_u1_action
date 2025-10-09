@@ -24,10 +24,16 @@ jobs:
           python-version: '3.10'
 
       - name: Instalar dependencias
-        run: pip install pytest pdoc
+        run: |
+          pip install pytest pdoc
+          sudo apt-get update
+          sudo apt-get install -y pandoc
 
       - name: Generar documentación HTML
         run: pdoc -o docs/ main.py src/
+
+      - name: Generar documentación LaTeX
+        run: pandoc docs/index.html -o docs/documentation.tex
         
       - name: Generar documentación en texto plano
         run: |
@@ -42,5 +48,5 @@ jobs:
       - name: Commit automático del README, report, badge y documentation
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update README, report.md, badge.svg con estado de tests y documentación automática"
+          commit_message: "Update README, report.md, badge.svg con estado de tests y documentación automática (HTML, Latex, TXT)"
           file_pattern: README.md report.md badge.svg docs/
